@@ -1,0 +1,75 @@
+<div class="container mt-2">
+  <h2 class="text-center"> Annotation Program</h2>
+  <hr>
+
+  <div>
+    <div class="row">
+      <div class="col-4">
+        <div class="form-group">
+          <label> Add some labels for annotation</label>
+          <input class="form-control " placeholder="add label name" type="text" [formControl]="category">
+        </div>
+        <div class="form-group mt-2">
+          <label>select a color for the label </label>
+          <input [(colorPicker)]="color" class="form-control" [style.background]="color" />
+        </div>
+        <div class="form-group mt-2">
+
+          <button class="btn btn-danger " [disabled]="this.category.value.length == 0" (click)="onClick()"> Add label
+          </button>
+
+          <hr>
+
+        </div>
+
+        <div class="">
+          <button *ngFor="let elem of all_categories" class="btn me-3 mb-2"
+            [ngStyle]="{'backgroundColor':elem.color, 'color':'white'}" (click)="selectCategory(elem)">
+            {{elem.category}}
+          </button>
+        </div>
+      </div>
+
+      <div class="col-6">
+
+        <div class="col-group">
+          <label for="">Enter the text to annotate</label>
+          <textarea rows="4" class="form-control" [formControl]="text"></textarea>
+        </div>
+
+        <div class="form-group mt-2">
+          <button class="btn btn-danger" [disabled]="text.value.length <= 10" (click)="onAddText()"> add text</button>
+          <small class="me-2 text-danger"><i> text must contains at least 10 characters</i></small>
+        </div>
+
+        <hr class="mt-3">
+
+        <div *ngIf="chosen_text">
+
+          <div (mouseup)="addAnnotation()">
+
+            <ngx-annotate-text [(annotations)]="annotations" [removable]="true" [text]="chosen_text"
+              annotationClass="my-annotation" #annotateText>
+            </ngx-annotate-text>
+
+          </div>
+
+          <hr>
+
+          <button class="btn btn-success btn-large" (click)="submitText()">extract json</button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div *ngIf="!selected_category" class="alert alert-warning mt-5" role="alert">
+    please add and select a label
+  </div>
+
+  <div *ngIf="selected_category" class="alert alert-primary mt-5 " role="alert">
+    Label <span [ngStyle]="{'color':selected_category.color, 'backgroundColor': 'white' , 'padding':'0.5rem'}">{{selected_category.category}}</span> is selected
+  </div>
+
+</div>
